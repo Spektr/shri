@@ -1,0 +1,25 @@
+html, body, .b-index{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.b-index{}
+.b-index__head{
+    text-align: center;
+    border-bottom: 1px solid rgb(219, 219, 219);
+}
+.b-index__menu{
+    float: left;
+    width: 120px;
+    height: 100%;
+    overflow: auto;
+}
+.b-index__content{
+    margin-left: 120px;
+    height: 100%;
+    border-left: 1px dashed rgb(219, 219, 219);
+    overflow: auto;
+}
