@@ -205,6 +205,5 @@ window.blib =(function(){
 				
 			}, false );//DOMContentLoaded
 		}//vanishLoad()
-		
 	};//return
 })(); 

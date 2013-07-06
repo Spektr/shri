@@ -16,11 +16,9 @@
     transition: all 1s ease;
 }
 
-.b-task__item:hover{
-    background: rgb(224, 224, 224);
-}
+.b-task__item:hover,
 .b-task__item_active{
-
+    background: rgb(224, 224, 224);
 }
 .b-task__item_correct{
     color: green;
@@ -34,6 +32,9 @@
     margin: 2px;
     padding: 25px 2px 2px 2px;
     overflow: hidden;
+}
+.b-task__slide_closed{
+    height: 0;
 }
 .b-task__slide:before{
     content: '';
@@ -53,6 +54,16 @@
 .b-task__slide_description:before{content: 'Вопрос';}
 .b-task__slide_solution{}
 .b-task__slide_solution:before{content: 'Ответ';}
+.b-task__slide_solution textarea{
+    float: right;
+    box-sizing: border-box;
+    padding: 5px;
+    width: 100%;
+    border: none;
+    outline:none;
+    resize: vertical;
+    overflow: hidden;
+}
 
 /*хаки*/
 .b-task__item:last-child,
