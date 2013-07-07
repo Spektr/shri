@@ -1,5 +1,7 @@
 $(function(){
 
+    bSimulatedServer.getQuestionArray();
+
     //закрывает текст вопроса
     $('.b-task__slide_description').on('click',function(){
         $(this).toggleClass('b-task__slide_closed');

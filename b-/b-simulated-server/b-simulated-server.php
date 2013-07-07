@@ -3,7 +3,7 @@ header('Content-type: application/json; charset: utf8');
 
 switch($_REQUEST['action']){
 
-	case "showQuestions":
+	case "getQuestions":
 		echo '{
 			"status":true,
 			"message":"Ok",
@@ -11,16 +11,19 @@ switch($_REQUEST['action']){
 				{
 				"request":"Чо за город?",
 				"answerType":"text",
+				"answerRegExp":false,
 				"answer":"Москва"
 				},
 				{
 				"request":"Чо за ВУЗ?",
 				"answerType":"text",
+				"answerRegExp":false,
 				"answer":"Шолохет"
 				},
 				{
 				"request":"Скока лет?",
 				"answerType":"text",
+				"answerRegExp":false,
 				"answer":"26"
 				},
 			]
@@ -29,7 +32,7 @@ switch($_REQUEST['action']){
 	break;
 	
 	default:
-		
+		echo 'хрень';
 	break;
 
 }
