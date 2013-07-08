@@ -1,5 +1,5 @@
 <?php
-header('Content-type: application/json; charset: utf8');
+header('Content-type: application/json');
 
 switch($_REQUEST['action']){
 
@@ -9,30 +9,30 @@ switch($_REQUEST['action']){
 			"message":"Ok",
 			"items":[
 				{
-				"request":"×î çà ãîðîä?",
+				"request":"Ð§Ð¾ Ð·Ð° Ð³Ð¾Ñ€Ð¾Ð´?",
 				"answerType":"text",
 				"answerRegExp":false,
-				"answer":"Ìîñêâà"
+				"answer":"ÐœÐ¾ÑÐºÐ²Ð°"
 				},
 				{
-				"request":"×î çà ÂÓÇ?",
+				"request":"Ð§Ð¾ Ð·Ð° Ð’Ð£Ð—?",
 				"answerType":"text",
 				"answerRegExp":false,
-				"answer":"Øîëîõåò"
+				"answer":"Ð¨Ð¾Ð»Ð¾Ñ…ÐµÑ‚"
 				},
 				{
-				"request":"Ñêîêà ëåò?",
+				"request":"Ð¡ÐºÐ¾ÐºÐ° Ð»ÐµÑ‚?",
 				"answerType":"text",
 				"answerRegExp":false,
 				"answer":"26"
-				},
+				}
 			]
 		}';
 		
 	break;
 	
 	default:
-		echo 'õðåíü';
+		echo 'Ñ…Ñ€ÐµÐ½ÑŒ';
 	break;
 
 }

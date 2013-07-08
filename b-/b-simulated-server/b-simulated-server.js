@@ -6,20 +6,25 @@ window.bSimulatedServer = (function (){
 
     return {
 
-        'getQuestionArray':function(){
+        'getQuestionArray':function(callback, forceLoad){
             $.ajax({
                 url:"b-/b-simulated-server/b-simulated-server.php",
                 dataType:"json",
                 data:"action=getQuestions",
                 success:function(data){
-                    console.log(data);
-                },
-                error:function(data){
-                    console.log(data);
+                    if(!data['status']||(questionArray.length && !forceLoad)){return false;}
+                    questionArray = data['items'];
+                    callback(questionArray);
                 }
             })
         },
 
+        'getQuestion':function(index){
+            if(index in questionArray){
+                currentQuestion=index;
+                return questionArray[index];
+            }
+        },
 
         'setAnswer':function(answer){
             checkAnswer(answer)

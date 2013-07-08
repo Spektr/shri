@@ -1,6 +1,6 @@
-.b-task{
-    /*position: relative;*/
-}
+.b-task{}
+.b-task__menu{}
+.b-task__content{}
 .b-task__item{
     text-decoration: none;
     margin: 2px;
