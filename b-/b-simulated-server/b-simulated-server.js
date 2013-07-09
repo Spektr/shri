@@ -20,14 +20,18 @@ window.bSimulatedServer = (function (){
         },
 
         'getQuestion':function(index){
+            console.log(index);
+            console.log(questionArray);
             if(index in questionArray){
-                currentQuestion=index;
+                //currentQuestion=index;
                 return questionArray[index];
             }
         },
 
-        'setAnswer':function(answer){
-            checkAnswer(answer)
+        'setAnswer':function(answer, newIndex){
+            questionArray[currentQuestion]['answer'] = answer;
+            currentQuestion = newIndex;
+            return 1;
         }
     }
 
