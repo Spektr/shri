@@ -9,9 +9,9 @@ switch($_REQUEST['action']){
 			"message":"Ok",
 			"items":[
 				{
-				"request":"Чо за город?",
+				"request":"Год рождения?",
 				"answerType":"text",
-				"answerRegExp":false,
+				"answerRegExp":"[0-9]{4}",
 				"answer":"Москва"
 				},
 				{

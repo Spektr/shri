@@ -1,7 +1,7 @@
 window.bSimulatedServer = (function (){
 
 
-    var currentQuestion = 0,
+    var currentQuestion = "start",
         questionArray = [];
 
     return {
@@ -29,9 +29,20 @@ window.bSimulatedServer = (function (){
         },
 
         'setAnswer':function(answer, newIndex){
+
+            //проверка на первое обращение и заполненность
+            if(currentQuestion=="start" || answer==""){
+                currentQuestion = newIndex;
+                return 0;
+            }
+
             questionArray[currentQuestion]['answer'] = answer;
             currentQuestion = newIndex;
-            return 1;
+
+            //проверка на регулярку
+            var expr = (questionArray[currentQuestion]['answerRegExp'])?new RegExp(questionArray[currentQuestion]['answerRegExp'], 'img'):false;
+            return (!expr || expr.test(answer))?1:-1;
+
         }
     }
 
