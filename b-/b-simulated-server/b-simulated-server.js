@@ -37,11 +37,12 @@ window.bSimulatedServer = (function (){
             }
 
             questionArray[currentQuestion]['answer'] = answer;
+            var expr = (questionArray[currentQuestion]['answerRegExp'])?new RegExp(questionArray[currentQuestion]['answerRegExp'], 'img'):false;
             currentQuestion = newIndex;
 
             //проверка на регулярку
-            var expr = (questionArray[currentQuestion]['answerRegExp'])?new RegExp(questionArray[currentQuestion]['answerRegExp'], 'img'):false;
-            return (!expr || expr.test(answer))?1:-1;
+            var temp = (expr)?expr.test(answer):true;
+            return (temp)?1:"-1";
 
         }
     }

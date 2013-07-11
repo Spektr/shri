@@ -22,7 +22,7 @@ $(function(){
         //console.log(index);
         var question = bSimulatedServer.getQuestion(index);
         var answerStatus = bSimulatedServer.setAnswer($('.b-task__slide_solution textarea').val(), index);
-
+        console.log(answerStatus);
         if(answerStatus>0){
             var statusClass = "b-pic b-pic__shri b-pic__shri_correct";
         }else if(answerStatus<0){
@@ -32,7 +32,7 @@ $(function(){
         }
 
         if(!question){console.log("печаль с выбором запроса");}
-        $('.b-task__item_active').addClass(statusClass).removeClass('b-task__item_active');
+        $('.b-task__item_active').removeClass('b-task__item_active b-pic b-pic__shri b-pic__shri_correct b-pic__shri_wrong').addClass(statusClass);
         $(this).addClass('b-task__item_active');
         console.log(question);
         $('.b-task__slide_description').text(question['request']);
