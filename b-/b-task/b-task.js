@@ -6,7 +6,7 @@ $(function(){
     function createTaskMenu(data){
         var list =[];
         for(var len=data.length, i=0;i<len;i++){
-            var item = $('<div />', {'class':"b-task__item ", 'text':"Вопрос "+i});
+            var item = $('<div />', {'class':"b-task__item", 'text':"Вопрос "+i});
             list.push(item);
         }
 

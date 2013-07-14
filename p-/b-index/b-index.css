@@ -8,12 +8,14 @@ html, body, .b-index{
 
 .b-index{}
 .b-index__head{
+    padding: 2px;
     border-bottom: 1px solid rgb(219, 219, 219);
 }
 .b-index__link{
     display: inline-block;
     float: left;
     width: 120px;
+    text-align: center;
 }
 .b-index__process{
     margin-left: 120px;

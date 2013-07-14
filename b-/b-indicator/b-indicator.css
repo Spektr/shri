@@ -1,0 +1,29 @@
+.b-indicator{
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.b-indicator__percent{
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+.b-indicator__line{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 60%;
+
+    background: #32db04; /* Old browsers */
+    background: -moz-linear-gradient(top,  #32db04 0%, #68ff8b 12%, #05ff15 89%, #32db04 98%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#32db04), color-stop(12%,#68ff8b), color-stop(89%,#05ff15), color-stop(98%,#32db04)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #32db04 0%,#68ff8b 12%,#05ff15 89%,#32db04 98%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #32db04 0%,#68ff8b 12%,#05ff15 89%,#32db04 98%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #32db04 0%,#68ff8b 12%,#05ff15 89%,#32db04 98%); /* IE10+ */
+    background: linear-gradient(to bottom,  #32db04 0%,#68ff8b 12%,#05ff15 89%,#32db04 98%); /* W3C */
+}
+.b-indicator__pointer{}
