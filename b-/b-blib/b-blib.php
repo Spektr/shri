@@ -30,7 +30,8 @@ function getCache($types, $exception, $order){
 		$answer['status']=false;
 		if(!empty($list)){
 			$answer['status']=true;
-			$answer[$key]['path']= $path;
+			$answer['version']= filemtime("__cache/b-cache.ini");
+			$answer[$key]['name']= $path;
 			$answer[$key]['list']= $list;
 		}
 	}
