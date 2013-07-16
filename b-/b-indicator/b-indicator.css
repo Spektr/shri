@@ -4,6 +4,7 @@
     width: 100%;
     margin: 0;
     padding: 0;
+    box-shadow: 0px 0px 2px black;
 }
 .b-indicator__percent{
     display: inline-block;
@@ -26,4 +27,4 @@
     background: -ms-linear-gradient(top,  #32db04 0%,#68ff8b 12%,#05ff15 89%,#32db04 98%); /* IE10+ */
     background: linear-gradient(to bottom,  #32db04 0%,#68ff8b 12%,#05ff15 89%,#32db04 98%); /* W3C */
 }
-.b-indicator__pointer{}
+.b-indicator__point{}

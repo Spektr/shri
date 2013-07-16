@@ -8,6 +8,7 @@ html, body, .b-index{
 
 .b-index{}
 .b-index__head{
+    height: 20px;
     padding: 2px;
     border-bottom: 1px solid rgb(219, 219, 219);
 }
@@ -18,6 +19,7 @@ html, body, .b-index{
     text-align: center;
 }
 .b-index__process{
+    padding: 0 2px;
     margin-left: 120px;
 }
 

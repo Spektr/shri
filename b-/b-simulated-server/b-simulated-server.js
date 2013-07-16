@@ -20,8 +20,6 @@ window.bSimulatedServer = (function (){
         },
 
         'getQuestion':function(index){
-            console.log(index);
-            console.log(questionArray);
             if(index in questionArray){
                 //currentQuestion=index;
                 return questionArray[index];

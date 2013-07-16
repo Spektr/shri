@@ -2,6 +2,7 @@ $(function(){
 
     //устанавливаем обработчик на полученные вопросы
     bSimulatedServer.getQuestionArray(createTaskMenu);
+    var rrr = new Indicator($('.b-index__process')[0], 3);
 
     function createTaskMenu(data){
         var list =[];
@@ -19,12 +20,10 @@ $(function(){
 
     function getQuestion(){
         var index = $(this).index();
-        //console.log(index);
         var question = bSimulatedServer.getQuestion(index);
         var answerStatus = bSimulatedServer.setAnswer($('.b-task__slide_solution textarea').val(), index);
-        console.log(answerStatus);
         if(answerStatus>0){
-            var statusClass = "b-pic b-pic__shri b-pic__shri_correct";
+            var statusClass = "b-pic b-pic__shri b-pic__shri_correct b-indicator__point";
         }else if(answerStatus<0){
             var statusClass = "b-pic b-pic__shri b-pic__shri_wrong";
         }else{
@@ -32,11 +31,12 @@ $(function(){
         }
 
         if(!question){console.log("печаль с выбором запроса");}
-        $('.b-task__item_active').removeClass('b-task__item_active b-pic b-pic__shri b-pic__shri_correct b-pic__shri_wrong').addClass(statusClass);
+        $('.b-task__item_active').removeClass('b-task__item_active b-pic b-pic__shri b-pic__shri_correct b-pic__shri_wrong  b-indicator__point').addClass(statusClass);
         $(this).addClass('b-task__item_active');
-        console.log(question);
         $('.b-task__slide_description').text(question['request']);
         $('.b-task__slide_solution textarea').val(question['answer']);
+
+        rrr.autoChange();
     }
 
 
