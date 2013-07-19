@@ -32,7 +32,7 @@ $(function(){
             $('.b-task__item_active').removeClass('b-task__item_active b-pic b-pic__shri b-pic__shri_correct b-pic__shri_wrong  b-indicator__point').addClass(statusClass);
             $(this).addClass('b-task__item_active');
             $('.b-task__slide_description').text(question['request']);
-            $('.b-task__slide_solution textarea').val(question['answer']);
+            $('.b-task__slide_solution textarea').val(question['answer']).keyup();
 
             processbar.autoChange(10);
         }

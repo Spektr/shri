@@ -11,6 +11,7 @@ html, body, .b-index{
     height: 20px;
     padding: 2px;
     border-bottom: 1px solid rgb(219, 219, 219);
+	background:#F3F3F3;
 }
 .b-index__link{
     display: inline-block;
@@ -19,10 +20,11 @@ html, body, .b-index{
     text-align: center;
 }
 .b-index__process{
+	text-align:center;
     padding: 0 2px;
     margin-left: 120px;
+	height:100%;
 }
-
 .b-index__menu{
     float: left;
     width: 120px;
@@ -30,8 +32,7 @@ html, body, .b-index{
     overflow: auto;
 }
 .b-index__content{
-    margin-left: 120px;
     height: 100%;
     border-left: 1px dashed rgb(219, 219, 219);
-    overflow: auto;
+    overflow-y: auto;
 }
