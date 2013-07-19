@@ -52,6 +52,8 @@
 
 .b-task__slide_description{}
 .b-task__slide_description:before{content: 'Вопрос';}
+.b-task__slide_example{}
+.b-task__slide_example:before{content: 'Пример';}
 .b-task__slide_solution{}
 .b-task__slide_solution:before{content: 'Ответ';}
 .b-task__slide_solution textarea{
@@ -64,6 +66,7 @@
     resize: vertical;
     overflow: hidden;
 }
+
 
 /*хаки*/
 .b-task__item:last-child,

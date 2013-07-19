@@ -28,22 +28,27 @@ $(function(){
                 var statusClass = "";
             }
 
-            if(!question){console.log("печаль с выбором запроса");}
+            if(!question){ return console.log("печаль с выбором запроса");}
             $('.b-task__item_active').removeClass('b-task__item_active b-pic b-pic__shri b-pic__shri_correct b-pic__shri_wrong  b-indicator__point').addClass(statusClass);
             $(this).addClass('b-task__item_active');
-            $('.b-task__slide_description').text(question['request']);
-            $('.b-task__slide_solution textarea').val(question['answer']).keyup();
+            $('.b-task__slide_description').html(question['request']);
+			
+			
+			if(question['example']){
+				$('.b-task__example').addClass("b-task__slide b-task__slide_example");
+				blib.include(question['example'], '.b-task__example');
+			}else{
+				$('.b-task__example').removeClass("b-task__slide b-task__slide_example").html('');				
+			}
+			
+			$('.b-task__slide_solution textarea').val(question['answer']).keyup();
 
             processbar.autoChange(10);
         }
     }
 
-
-
-
-
     //закрывает текст вопроса
-    $('.b-task__slide_description').on('click',function(){
+    $('.b-task__slide_description, .b-task__example').on('click',function(){
         $(this).toggleClass('b-task__slide_closed');
     });
 

@@ -1,0 +1,12 @@
+.b-factorion{}
+.b-factorion__console{
+	float: right;
+	height: 100%;
+	border: 1px solid rgb(202, 202, 202);
+	padding: 5px;
+	min-width: 400px;
+	font-size: 12px;
+}
+.b-factorion__start-button{}
+.b-factorion__code{}
+

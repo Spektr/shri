@@ -1,5 +1,5 @@
 <?php
-header('Content-type: application/json');
+header('Content-type: application/json; charset=utf-8');
 
 switch($_REQUEST['action']){
 
@@ -79,6 +79,12 @@ switch($_REQUEST['action']){
 				"answerType":"text",
 				"answerRegExp":false,
 				"answer":"Не пользуюсь командной строкой, если надо научусь. Только с git через строчку работаю."
+				},
+				{
+				"request":"Напишите на JavaScript функцию, которая выводит список всех чисел, которые равны сумме факториалов своих цифр. Пример такого числа:<br />4! + 0! + 5! + 8! + 5! = 40585<br />В качестве ответа на вопрос пришлите ссылку на http://jsfiddle.net/ с вашим кодом или на ваш репозиторий на https://github.com/.",
+				"example":"/p-/b-factorion/b-factorion",
+				"answerRegExp":false,
+				"answer":"https://github.com"
 				}
 			]
 		}';
