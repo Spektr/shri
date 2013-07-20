@@ -1,5 +1,25 @@
 <div class="b-factorion">
-	<code type="javascript" class="b-factorion__code">Злокод</code>
-	<div class="b-factorion__console">Тут консоль</div>
-	<a class="b-factorion__start-button">Злокнопка</a>
+	<div class="b-factorion__console"></div>
+	<a href="#" class="b-factorion__button b-factorion__button_start">start</a>
+    <a href="#" class="b-factorion__button b-factorion__button_copy">copy</a>
+    <pre class="b-factorion__code">function fact(num){
+            var ret=1;
+            for(var i=1;i<=num;i++){
+            ret=ret*i;
+            }
+            return ret;
+        }
+
+        function bruteforce(){
+            var str,sum;
+            for(var i=1;i < =7*fact(9);i++){
+                str=i.toString();
+                sum=0;
+                for(var j=0; j< str.length; j++){
+                    sum+=fact(parseInt(str[j]));
+                }
+                if(sum==i) alert(str);
+            }
+        }
+    </pre>
 </div>

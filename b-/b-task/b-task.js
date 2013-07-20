@@ -48,7 +48,7 @@ $(function(){
     }
 
     //закрывает текст вопроса
-    $('.b-task__slide_description, .b-task__example').on('click',function(){
+    $('.b-task__slide_description').on('click',function(){
         $(this).toggleClass('b-task__slide_closed');
     });
 
