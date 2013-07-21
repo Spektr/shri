@@ -12,6 +12,7 @@
     padding: 5px;
     width: 400px;
     font-size: 12px;
+    overflow: auto;
 }
 .b-factorion__button{
     text-decoration: none;
@@ -21,7 +22,7 @@
     opacity: 0.2;
     color: black;
     float: right;
-    margin: 2px;
+    margin: 2px 5px;
     padding: 2px;
     min-width: 100px;
     text-align: center;
@@ -33,7 +34,7 @@
     opacity: 1;
 }
 .b-factorion__button_start{}
-.b-factorion__button_copy{}
+.b-factorion__button_solution{}
 .b-factorion__code{
     position: relative;
     z-index: 0;

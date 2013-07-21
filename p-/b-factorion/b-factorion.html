@@ -1,25 +1,30 @@
 <div class="b-factorion">
 	<div class="b-factorion__console"></div>
-	<a href="#" class="b-factorion__button b-factorion__button_start">start</a>
-    <a href="#" class="b-factorion__button b-factorion__button_copy">copy</a>
-    <pre class="b-factorion__code">function fact(num){
-            var ret=1;
-            for(var i=1;i<=num;i++){
-            ret=ret*i;
-            }
-            return ret;
-        }
+	<a href="#" class="b-factorion__button b-factorion__button_start">запустить</a>
+    <a href="#" class="b-factorion__button b-factorion__button_solution">решение</a>
+    <pre class="b-factorion__code">
+/** Рекурсивный поиск факториала */
+var factorial=(function(){
+    var stack =[1,1,2];
+    return function (n){
+        if(stack[n])return stack[n];
+        stack[n]=n*factorial(n-1);
+        return stack[n];
+    }
+})();
 
-        function bruteforce(){
-            var str,sum;
-            for(var i=1;i < =7*fact(9);i++){
-                str=i.toString();
-                sum=0;
-                for(var j=0; j< str.length; j++){
-                    sum+=fact(parseInt(str[j]));
-                }
-                if(sum==i) alert(str);
-            }
+/** Поиск полным перебором факториона */
+function factorion(){
+    var str,sum;
+    for(var len=7*factorial(9),i= 1;i<=len;i++){
+        str=i.toString();
+        sum=0;
+        for(var secLen=str.length,j=0; j < secLen; j++){
+            sum+=factorial(parseInt(str[j]));
         }
+        if(sum==i) console.log(str);
+    }
+}
+factorion();
     </pre>
 </div>

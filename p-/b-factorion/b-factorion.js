@@ -1,51 +1,42 @@
 $(function(){
-    var stack ={};
-    var factorial=function (n) {
-        console.log(stack[n]);
-        if(stack[n])return stack[n];
-        if(n!=1){
+
+    var factorial=(function(){
+        var stack =[1,1,2];
+        return function (n){
+            if(stack[n])return stack[n];
             stack[n]=n*factorial(n-1);
-            return n*factorial(n-1);
-        }else{
-            return 1;
+            return stack[n];
         }
-    }
+    })();
+
     function factorion(){
-        var str,sum;
-        for(var len=7*factorial(9),i= 1;i<=len;i++){
+        var str,
+            sum,
+            message=[],
+            startTime = new Date();
+
+        message.push("Скрипт запущен ("+startTime.getHours()+':'+startTime.getMinutes()+':'+startTime.getSeconds()+"):");
+        message.push("--------");
+        for(var len=(7*factorial(9)),i= 1;i<=len;i++){
             str=i.toString();
             sum=0;
             for(var secLen=str.length,j=0;j<secLen;j++){
                 sum+=factorial(parseInt(str[j]));
             }
-            if(sum==i) $('.b-factorion__console').append(str+"<br />");
+            if(sum==i) message.push(str);
         }
-        $('.b-factorion__console').append("<hr />");
+        message.push("--------");
+        message.push("время работы:"+(new Date()- startTime)/1000+"сек.");
+        message.push("<hr />");
+        message=message.join("<br />");
+        $('.b-factorion__console').append(message);
     }
 
-
-    function fact(num){
-		var ret=1;
-		for(var i=1;i<=num;i++){
-			ret=ret*i;
-		}
-		return ret;
-	}
-	
-	function bruteforce(){
-		var str,sum;
-		for(var i=1;i<=7*fact(9);i++){
-			str=i.toString();
-			sum=0;
-			for(var j=0;j<str.length;j++){
-				sum+=fact(parseInt(str[j]));
-			}
-			if(sum==i) $('.b-factorion__console').append(str+"<br />");
-		}
-        $('.b-factorion__console').append("<hr />");
+	function solution(){
+        $('.b-factorion__console').html('Вики-решение<br /><br />Определив верхнюю границу для факторионов, несложно (например, полным перебором) показать, что существует ровно 4 таких числа.<br /> Любое n-значное число не меньше 10^{n-1}. Однако при этом сумма факториалов его цифр не больше 9!* n, где 9!=362880.<br /> Так как первое число возрастает быстрее второго (первое зависит от n экспоненциально, а второе — линейно), а уже 10^{8-1}=10000000>9!*8=2903040.<br /> Следовательно все факторионы состоят не более, чем из 7 цифр. Даже точнее — они меньше 7*9!=2540160.<hr />');
 	}
 
-    $('.b-factorion__button_copy').on('click', bruteforce);
+    $('.b-factorion__button_solution').on('click', solution);
     $('.b-factorion__button_start').on('click', factorion);
 	
 });
