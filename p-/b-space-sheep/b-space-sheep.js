@@ -39,12 +39,31 @@ function SpaceObject(spaceParams){
 			}
 			console.log(type+". "+name+". Местоположение:"+currentPlace+cargo);
 		},
+        unloadCargoFrom = function(SpaceObject, cargoWeight){ //разгружает объект
+            if(!SpaceObject['getAvailableAmountOfCargo'] || cargoWeight<0){
+                return false;
+            }else if(cargoWeight>loadLevel){
+                if(!confirm("Вы реально желаете забрать все товары?")){return false;};
+                loadLevel= SpaceObject.loadCargoTo(this, loadLevel);
+            }else{
+                loadLevel-=SpaceObject.loadCargoTo(this, cargoWeight);
+            };
+            return (typeof loadLevel == "number")?true:false;
+        },
 		loadCargoTo = function(SpaceObject, cargoWeight){ //загружает
-			
+			if(!SpaceObject['getAvailableAmountOfCargo'] || cargoWeight<0){
+                return false;
+            }else if(cargoWeight>getFreeSpace()){
+                if(!confirm("Вы реально желаете загрузиться по полной?")){return false;};
+                var rests = getFreeSpace();
+                loadLevel=capacity;
+                return rests;
+            }else{
+                loadLevel+=cargoWeight;
+                return cargoWeight;
+            };
 		},
-		unloadCargoFrom = function(SpaceObject, cargoWeight){ //выгружает
-			
-		},
+
 		
 		/** Возвращаемый godlike объект с кучей методов */
 		obj = {
@@ -69,6 +88,9 @@ function Vessel(){
 	arguments[0]['loadLevel']=0;
     var me = SpaceObject(arguments[0]);
 	me.setType("Грузовой корабль");
+    me.flyTo=function(){
+
+    }
 	
     me.constructor = arguments.callee;
     return me;
@@ -79,10 +101,7 @@ function Planet(){
 	var me = SpaceObject(arguments[0]);
 	me.setType("Планета");
 	me.setPosition = function(){}; /** Если это солнце и оно не движется */
-	me.flyTo=function(){
-		
-	}	
-	
+
     me.constructor = arguments.callee;
     return me;
 }
@@ -98,41 +117,12 @@ yambler2.report();
 yambler3.report();
 earth.report();
 mars.report();
-console.log(yambler2.getFreeSpace());
+earth.unloadCargoFrom(yambler, 9001);
+yambler.report();
+earth.report();
 
 
 
-
-/**
- * Создает экземпляр космического корабля.
- * @name Vessel
- * @param {String} name Название корабля.
- * @param {Number}[] position Местоположение корабля.
- * @param {Number} capacity Грузоподъемность корабля.
- */
-//function Vessel(name, position, capacity) {}
-
-/**
- * Выводит текущее состояние корабля: имя, местоположение, доступную грузоподъемность.
- * @example
- * vessel.report(); // Грузовой корабль. Местоположение: Земля. Товаров нет.
- * @example
- * vesserl.report(); // Грузовой корабль. Местоположение: 50,20. Груз: 200т.
- * @name Vessel.report
- */
-//Vessel.prototype.report = function () {}
-
-/**
- * Выводит количество свободного места на корабле.
- * @name Vessel.getFreeSpace
- */
-//Vessel.prototype.getFreeSpace = function () {}
-
-/**
- * Выводит количество занятого места на корабле.
- * @name Vessel.getOccupiedSpace
- */
-//Vessel.prototype.getOccupiedSpace = function () {}
 
 /**
  * Переносит корабль в указанную точку.
@@ -145,27 +135,6 @@ console.log(yambler2.getFreeSpace());
  * @name Vessel.report
  */
 //Vessel.prototype.flyTo = function (newPosition) {}
-
-/**
- * Создает экземпляр планеты.
- * @name Planet
- * @param {String} name Название Планеты.
- * @param {Number}[] position Местоположение планеты.
- * @param {Number} availableAmountOfCargo Доступное количество груза.
- */
-//function Planet(name, position, availableAmountOfCargo) {}
-
-/**
- * Выводит текущее состояние планеты: имя, местоположение, количество доступного груза.
- * @name Planet.report
- */
-//Planet.prototype.report = function () {}
-
-/**
- * Возвращает доступное количество груза планеты.
- * @name Vessel.getAvailableAmountOfCargo
- */
-//Planet.prototype.getAvailableAmountOfCargo = function () {}
 
 /**
  * Загружает на корабль заданное количество груза.
