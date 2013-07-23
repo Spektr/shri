@@ -12,9 +12,14 @@ function SpaceObject(spaceParams){
 		setType = function(typeName){if((typeof typeName=='string') && !type){type=typeName;};},
 		getPosition = function(){return position;},
 		setPosition = function(x,y){position=[x,y];},
-		getFreeSpace = function(){return (capacity-loadLevel);},
 		getOccupiedSpace = function(){return loadLevel;},
 		getAvailableAmountOfCargo = function(){return capacity;},
+        getFreeSpace = function(){return (capacity-loadLevel);},
+        nearTo = function(SpaceObject){
+            var one = SpaceObject.getPosition(),
+                two = this.getPosition();
+            return (one[0]==two[0]&&one[1]==two[1])?true:false;
+        },
 		
 		/**
 		 * Выводит текущее состояние объекта: тип, имя, местоположение, доступную грузоподъемность.
@@ -69,9 +74,10 @@ function SpaceObject(spaceParams){
 			'setType':setType,
 			'getPosition':getPosition,
 			'setPosition':setPosition,
-			'getFreeSpace':getFreeSpace,
 			'getOccupiedSpace':getOccupiedSpace,
 			'getAvailableAmountOfCargo':getAvailableAmountOfCargo,
+            'getFreeSpace':getFreeSpace,
+            'nearTo':nearTo,
 			'report':report,
 			'commonLoad':commonLoad
 		};
@@ -94,10 +100,10 @@ function Planet(){
 	me.setType("Планета");
 	
 	me.loadCargoTo = function(SpaceObject, cargoWeight){
-		return me.commonLoad(SpaceObject, cargoWeight, true);
+		return (me.nearTo(SpaceObject))?me.commonLoad(SpaceObject, cargoWeight, true):false;
 	};
 	me.unloadCargoFrom = function(SpaceObject, cargoWeight){
-		return me.commonLoad(SpaceObject, cargoWeight, false);
+        return (me.nearTo(SpaceObject))?me.commonLoad(SpaceObject, cargoWeight, false):false;
 	};
 	
 	me.setPosition =function(){} /** Если это солнце и оно не движется */
