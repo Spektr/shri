@@ -27,7 +27,7 @@ function SpaceObject(spaceParams){
 		 * spaceObject.report(); // Грузовой корабль. Перехватчик №1. Местоположение: Земля. Товаров нет.
 		 * @example
 		 * spaceObject.report(); // Планета. Земля. Местоположение: 50,20. Количество груза: 200т.
-		 * @name Vessel.report
+		 * @name SpaceObject.report
 		 */		
 		report = function(){
 			var cargo = (loadLevel)?". Количество груза:"+loadLevel+"т.":". Грузов нет.";
@@ -89,7 +89,10 @@ function SpaceObject(spaceParams){
 function Vessel(){
     var me = SpaceObject(arguments[0]);
 	me.setType("Грузовой корабль");
-    me.flyTo=function(){};
+    me.flyTo=function(coords){
+        var coords = (coords['getAvailableAmountOfCargo'])?coords.getPosition():coords;
+        me.setPosition(coords[0],coords[1]);
+    };
 	
     me.constructor = arguments.callee;
     return me;
@@ -113,27 +116,21 @@ function Planet(){
 }
 
 
-var yambler = Vessel({'name':"Злокорабль",'position':[80,30], 'capacity':1000});
+var yambler = Vessel({'name':"Злокорабль",'position':[100,80], 'capacity':1000});
 var earth = Planet({'name':"Земля",'position':[80,30], 'loadLevel':10000});
 yambler.report();
 earth.report();
 console.log("-----");
-
+yambler.flyTo([50,80]);
+yambler.report();
+yambler.flyTo(earth);
+yambler.report();
+console.log("-----");
+console.log(allBodies[0].getPosition());
+console.log(allBodies[1].getPosition());
+console.log("-----");
 
 earth.unloadCargoFrom(yambler, 2000);
 yambler.report();
 earth.report();
 
-
-
-/**
- * Переносит корабль в указанную точку.
- * @param {Number}[]|Planet newPosition Новое местоположение корабля.
- * @example
- * vessel.flyTo([1,1]);
- * @example
- * var earth = new Planet('Земля', [1,1]);
- * vessel.flyTo(earth);
- * @name Vessel.report
- */
-//Vessel.prototype.flyTo = function (newPosition) {}
