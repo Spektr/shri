@@ -1,3 +1,4 @@
+/** Классы */
 var allBodies = [];
 function SpaceObject(spaceParams){
 	var type=false,
@@ -5,21 +6,29 @@ function SpaceObject(spaceParams){
 		position = spaceParams['position']||[0,0],
 		capacity = (spaceParams['capacity'] && spaceParams['capacity']>=0)?spaceParams['capacity']:1000000,
 		loadLevel = (spaceParams['loadLevel'] && spaceParams['loadLevel']<=capacity)?spaceParams['loadLevel']:0,
+		visualObject = document.createElement("span"),
 		
 		/** getters & setters */
 		getName = function(){return name;},
+		getObject = function(){return visualObject;},
 		getType = function(){return type;},
 		setType = function(typeName){if((typeof typeName=='string') && !type){type=typeName;};},
 		getPosition = function(){return position;},
-		setPosition = function(x,y){position=[x,y];},
+		setPosition = function(x,y){
+			x=(x)?x:position[0];
+			y=(y)?y:position[1];
+			position=[x,y];
+			visualObject.style.left = x+"px";
+			visualObject.style.top = y+"px";
+		},
 		getOccupiedSpace = function(){return loadLevel;},
 		getAvailableAmountOfCargo = function(){return capacity;},
-        getFreeSpace = function(){return (capacity-loadLevel);},
-        nearTo = function(SpaceObject){
-            var one = SpaceObject.getPosition(),
-                two = this.getPosition();
-            return (one[0]==two[0]&&one[1]==two[1])?true:false;
-        },
+		getFreeSpace = function(){return (capacity-loadLevel);},
+		nearTo = function(SpaceObject){
+			var one = SpaceObject.getPosition(),
+				two = this.getPosition();
+			return (one[0]==two[0]&&one[1]==two[1])?true:false;
+		},
 		
 		/**
 		 * Выводит текущее состояние объекта: тип, имя, местоположение, доступную грузоподъемность.
@@ -56,7 +65,7 @@ function SpaceObject(spaceParams){
 			
 			//
 			if(cargoWeight>available){
-                cargoWeight = (confirm(errorMessage))?available:0;
+				cargoWeight = (confirm(errorMessage))?available:0;
 			}
 			
 			
@@ -70,14 +79,15 @@ function SpaceObject(spaceParams){
 		/** Возвращаемый godlike объект с кучей методов */
 		obj = {
 			'getName':getName,
+			'getObject':getObject,
 			'getType':getType,
 			'setType':setType,
 			'getPosition':getPosition,
 			'setPosition':setPosition,
 			'getOccupiedSpace':getOccupiedSpace,
 			'getAvailableAmountOfCargo':getAvailableAmountOfCargo,
-            'getFreeSpace':getFreeSpace,
-            'nearTo':nearTo,
+			'getFreeSpace':getFreeSpace,
+			'nearTo':nearTo,
 			'report':report,
 			'commonLoad':commonLoad
 		};
@@ -87,50 +97,74 @@ function SpaceObject(spaceParams){
 }
 
 function Vessel(){
-    var me = SpaceObject(arguments[0]);
+	var me = SpaceObject(arguments[0]),
+		visualObject = me.getObject();
+		
 	me.setType("Грузовой корабль");
-    me.flyTo=function(coords){
-        var coords = (coords['getAvailableAmountOfCargo'])?coords.getPosition():coords;
-        me.setPosition(coords[0],coords[1]);
-    };
+	visualObject.className="b-space-sheep__object-sheep";
+	$('.b-space-sheep__field').append(visualObject);
+	me.setPosition();
 	
-    me.constructor = arguments.callee;
-    return me;
+	me.flyTo=function(coords, speed){
+		var coords = (coords['getAvailableAmountOfCargo'])?coords.getPosition():coords,
+			x = coords[0],
+			y = coords[1];
+
+		window.setTimeout(
+			function caller() {
+				oldCoords = me.getPosition(),
+				oX=oldCoords[0],
+				oY=oldCoords[1];
+				if(oX<x){oX++;}else if(oX>x){oX--;}
+				if(oY<y){oY++;}else if(oY>y){oY--;}
+				me.setPosition(oX,oY);				
+				if (oX!=x || oY!=y) {
+					setTimeout(caller, speed);
+				}
+			},
+			speed
+		);
+	};
+
+	
+	me.constructor = arguments.callee;
+	return me;
 }
 
 function Planet(){
-	var me = SpaceObject(arguments[0]);
+	var me = SpaceObject(arguments[0]),
+		visualObject = me.getObject();
+		
 	me.setType("Планета");
+	visualObject.className="b-space-sheep__object-planet";
+	$('.b-space-sheep__field').append(visualObject);
+	me.setPosition();
 	
 	me.loadCargoTo = function(SpaceObject, cargoWeight){
 		return (me.nearTo(SpaceObject))?me.commonLoad(SpaceObject, cargoWeight, true):false;
 	};
 	me.unloadCargoFrom = function(SpaceObject, cargoWeight){
-        return (me.nearTo(SpaceObject))?me.commonLoad(SpaceObject, cargoWeight, false):false;
+		return (me.nearTo(SpaceObject))?me.commonLoad(SpaceObject, cargoWeight, false):false;
 	};
 	
 	me.setPosition =function(){} /** Если это солнце и оно не движется */
 	
-    me.constructor = arguments.callee;
-    return me;
+	me.constructor = arguments.callee;
+	return me;
 }
 
 
-var yambler = Vessel({'name':"Злокорабль",'position':[100,80], 'capacity':1000});
-var earth = Planet({'name':"Земля",'position':[80,30], 'loadLevel':10000});
-yambler.report();
-earth.report();
-console.log("-----");
-yambler.flyTo([50,80]);
-yambler.report();
-yambler.flyTo(earth);
-yambler.report();
-console.log("-----");
-console.log(allBodies[0].getPosition());
-console.log(allBodies[1].getPosition());
-console.log("-----");
+$(function(){
+	var yambler = Vessel({'name':"Злокорабль",'position':[0,0], 'capacity':1000});
+	var earth = Planet({'name':"Земля",'position':[80,20], 'loadLevel':10000});
 
-earth.unloadCargoFrom(yambler, 2000);
-yambler.report();
-earth.report();
+	console.log("-----");
+	yambler.flyTo([150,80], 30);
+	//yambler.flyTo(earth);
 
+
+	
+	earth.unloadCargoFrom(yambler, 2000);
+
+
+});
