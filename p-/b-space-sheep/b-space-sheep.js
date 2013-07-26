@@ -7,7 +7,7 @@ function SpaceObject(spaceParams){
 		capacity = (spaceParams['capacity'] && spaceParams['capacity']>=0)?spaceParams['capacity']:1000000,
 		loadLevel = (spaceParams['loadLevel'] && spaceParams['loadLevel']<=capacity)?spaceParams['loadLevel']:0,
 		visualObject = document.createElement("span"),
-		
+				
 		/** getters & setters */
 		getName = function(){return name;},
 		getObject = function(){return visualObject;},
@@ -38,20 +38,30 @@ function SpaceObject(spaceParams){
 		 * spaceObject.report(); // Планета. Земля. Местоположение: 50,20. Количество груза: 200т.
 		 * @name SpaceObject.report
 		 */		
-		report = function(){
-			var cargo = (loadLevel)?". Количество груза:"+loadLevel+"т.":". Грузов нет.";
-			var currentPlace = position;
+		report = function(inText){
+			var rType="Тип: "+type+".<br /> ",
+				rName="Название: "+name+".<br /> ",
+				rCurrentPlace = "Местоположение: "+position+".<br />",
+				rCargo = "Груз: "+((loadLevel)?loadLevel+"т.":"отсутствует.")+"<br />";
+			
+			/** Корректируем позицию если на планете */
 			for(key in allBodies){
 				var obj = allBodies[key],
 					pos = obj.getPosition(),
 					x = pos[0],
 					y = pos[1];
-				
-				if(this!=obj && position[0]==x && position[1]==y && obj.getType()=="Планета"){
-					var currentPlace = obj.getName();
+
+				if(type!=obj.getType() && position[0]==x && position[1]==y && obj.getType()=="Планета"){
+					rCurrentPlace = "Местоположение:"+obj.getName()+".<br />";
 				}
 			}
-			console.log(type+". "+name+". Местоположение:"+currentPlace+cargo);
+			
+			/** сообщение в консоль или для отображения другим способом */
+			if(inText){
+				return rType+rName+rCurrentPlace+rCargo;
+			}else{
+				console.log(rType+rName+rCurrentPlace+rCargo);
+			}
 		},
 		
 		
@@ -92,16 +102,37 @@ function SpaceObject(spaceParams){
 			'commonLoad':commonLoad
 		};
 	
+	/** показ сообщений о состоянии*/
+	var messageObject = document.createElement("span");
+	messageObject.className = "b-space-sheep__object-message";
+	$('.b-space-sheep__field').append(messageObject);
+	
+	visualObject.onmouseover = function(){
+		var pos = getPosition();
+		messageObject.innerHTML = report(1);
+		messageObject.style.display = "inline";
+		messageObject.style.left =pos[0]+50+"px";
+		messageObject.style.top = pos[1]-30+"px";
+	}
+	visualObject.onmouseout = function(){
+		messageObject.innerText = "";
+		messageObject.style.display = "none";
+	}
+		
+	
 	allBodies.push(obj);
 	return obj
 }
 
 function Vessel(){
 	var me = SpaceObject(arguments[0]),
-		visualObject = me.getObject();
+		visualObject = me.getObject(),
+		timer;
+		
 		
 	me.setType("Грузовой корабль");
 	visualObject.className="b-space-sheep__object-sheep";
+	
 	$('.b-space-sheep__field').append(visualObject);
 	me.setPosition();
 	
@@ -109,9 +140,10 @@ function Vessel(){
 		var coords = (coords['getAvailableAmountOfCargo'])?coords.getPosition():coords,
 			x = coords[0],
 			y = coords[1];
-
+			
 		window.setTimeout(
 			function caller() {
+				window.clearTimeout(timer);
 				oldCoords = me.getPosition(),
 				oX=oldCoords[0],
 				oY=oldCoords[1];
@@ -119,7 +151,7 @@ function Vessel(){
 				if(oY<y){oY++;}else if(oY>y){oY--;}
 				me.setPosition(oX,oY);				
 				if (oX!=x || oY!=y) {
-					setTimeout(caller, speed);
+					timer = setTimeout(caller, speed);
 				}
 			},
 			speed
@@ -157,14 +189,15 @@ function Planet(){
 $(function(){
 	var yambler = Vessel({'name':"Злокорабль",'position':[0,0], 'capacity':1000});
 	var earth = Planet({'name':"Земля",'position':[80,20], 'loadLevel':10000});
+	var mars = Planet({'name':"Марс",'position':[180,200], 'loadLevel':10000});
+	var yambler2 = Vessel({'name':"Злокорабль 2",'position':[300,130], 'capacity':1000});
 
 	console.log("-----");
-	yambler.flyTo([150,80], 30);
-	//yambler.flyTo(earth);
+	yambler.flyTo(mars, 30);
+	yambler2.flyTo(earth, 30);
 
-
-	
-	earth.unloadCargoFrom(yambler, 2000);
+	$('.b-space-sheep__create-sheep').on
+	earth.unloadCargoFrom(yambler2, 2000);
 
 
 });
