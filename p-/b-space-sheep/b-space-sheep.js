@@ -1,5 +1,6 @@
 /** Классы */
-var allBodies = [];
+var allBodies = [],
+    currentObject={};
 function SpaceObject(spaceParams){
 	var type=false,
 		name=spaceParams['name']||"Инкогнито",
@@ -64,14 +65,13 @@ function SpaceObject(spaceParams){
 			}
 		},
 		
-		
 		/** общая функция загрузки выгрузки */
 		commonLoad = function(SpaceObject, cargoWeight, loading){
 			if(!SpaceObject['getAvailableAmountOfCargo'] || cargoWeight<0){ return false;};									//проверка на адекватность аргументов
 			var answer = false,																								//ответ метода (реально обработанное карго)
 			postCount = (commonLoad.caller && (commonLoad.caller.toString() == commonLoad.toString()))?true:false,			//0_0 флаг рекурсивного вызова
 			available = (loading)?this.getFreeSpace():loadLevel,															//доступное место/товар (зависит от операции)
-			errorMessage = (loading)?"Вы реально желаете загрузиться по полной?":"Вы реально желаете забрать все товары?";	//при переполнении
+			errorMessage = (loading)?"Вы реально желаете загрузиться по полной?":"Вы реально желаете забрать все товары?";	//сообщение при переполнении
 			
 			//
 			if(cargoWeight>available){
@@ -106,7 +106,6 @@ function SpaceObject(spaceParams){
 	var messageObject = document.createElement("span");
 	messageObject.className = "b-space-sheep__object-message";
 	$('.b-space-sheep__field').append(messageObject);
-	
 	visualObject.onmouseover = function(){
 		var pos = getPosition();
 		messageObject.innerHTML = report(1);
@@ -118,9 +117,8 @@ function SpaceObject(spaceParams){
 		messageObject.innerText = "";
 		messageObject.style.display = "none";
 	}
-		
-	
-	allBodies.push(obj);
+
+    allBodies.push(obj);
 	return obj
 }
 
@@ -128,19 +126,14 @@ function Vessel(){
 	var me = SpaceObject(arguments[0]),
 		visualObject = me.getObject(),
 		timer;
-		
-		
-	me.setType("Грузовой корабль");
-	visualObject.className="b-space-sheep__object-sheep";
-	
-	$('.b-space-sheep__field').append(visualObject);
+
+    $('.b-space-sheep__field').append(visualObject);
+    me.setType("Грузовой корабль");
 	me.setPosition();
-	
 	me.flyTo=function(coords, speed){
 		var coords = (coords['getAvailableAmountOfCargo'])?coords.getPosition():coords,
 			x = coords[0],
 			y = coords[1];
-			
 		window.setTimeout(
 			function caller() {
 				window.clearTimeout(timer);
@@ -158,7 +151,18 @@ function Vessel(){
 		);
 	};
 
-	
+    visualObject.className="b-space-sheep__object-sheep";
+    visualObject.onclick = function(){
+        var e = event || window.event;
+        currentObject = me;
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        } else {
+            e.cancelBubble = true;
+        }
+
+    }
+
 	me.constructor = arguments.callee;
 	return me;
 }
@@ -166,28 +170,49 @@ function Vessel(){
 function Planet(){
 	var me = SpaceObject(arguments[0]),
 		visualObject = me.getObject();
-		
+
+    $('.b-space-sheep__field').append(visualObject);
 	me.setType("Планета");
+    me.setPosition();
+    me.loadCargoTo = function(SpaceObject, cargoWeight){
+        return (me.nearTo(SpaceObject))?me.commonLoad(SpaceObject, cargoWeight, true):false;
+    };
+    me.unloadCargoFrom = function(SpaceObject, cargoWeight){
+        return (me.nearTo(SpaceObject))?me.commonLoad(SpaceObject, cargoWeight, false):false;
+    };
+    me.setPosition =function(){} /** Если это солнце и оно не движется */
+
+
 	visualObject.className="b-space-sheep__object-planet";
-	$('.b-space-sheep__field').append(visualObject);
-	me.setPosition();
-	
-	me.loadCargoTo = function(SpaceObject, cargoWeight){
-		return (me.nearTo(SpaceObject))?me.commonLoad(SpaceObject, cargoWeight, true):false;
-	};
-	me.unloadCargoFrom = function(SpaceObject, cargoWeight){
-		return (me.nearTo(SpaceObject))?me.commonLoad(SpaceObject, cargoWeight, false):false;
-	};
-	
-	me.setPosition =function(){} /** Если это солнце и оно не движется */
-	
+    /** летим текущим карабликом к планете */
+    visualObject.onclick = function(){
+        var e = event || window.event;
+        currentObject.flyTo(me.getPosition(),3);
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        } else {
+            e.cancelBubble = true;
+        }
+    }
+
+    /** загружаемся товарами */
+    visualObject.oncontextmenu = function(){
+        var operation = confirm("Желаете затовариться?"),
+            cargo = parseInt((operation)?prompt("Сколько загрузить?", 400):prompt("Ну тогда, сколько выгрузить?", 400));
+        if(operation){
+            me.unloadCargoFrom(currentObject,cargo);
+        }else{
+            me.loadCargoTo(currentObject,cargo);
+        }
+
+        return false;
+    }
+
 	me.constructor = arguments.callee;
 	return me;
 }
 
 function starObject(container, numStars, speed, delay){
-    console.log(container);
-
     var i= 0;
     window.setTimeout(function pull(){
         if(i>=numStars){return false;}
@@ -198,13 +223,9 @@ function starObject(container, numStars, speed, delay){
             step = 7,
             x = container.clientWidth,
             y = container.clientHeight;
-        console.log(x);
-        console.log(y);
-        console.log(container.style);
 
         star.className = "b-space-sheep__object-star";
         container.appendChild(star);
-
 
         var interval = window.setInterval(function starAnimate(){
             position-=step;
@@ -219,39 +240,27 @@ function starObject(container, numStars, speed, delay){
 
         var timeout = window.setTimeout(pull, delay);
     },0);
-
-
-
-
-
-
 }
 //window.clearInterval(interval);
 $(function(){
-    /** анимируем космос */
-    starObject($('.b-space-sheep__field')[0], 100, 1000, 300);
 
     /** выставляем две планеты */
 	var earth = Planet({'name':"Земля",'position':[80,20], 'loadLevel':10000});
 	var mars = Planet({'name':"Марс",'position':[180,200], 'loadLevel':10000});
 
     /** создаем корабли */
-    var sheep1 = Vessel({'name':"Космическая овца №1",'position':[0,0], 'capacity':1000});
-	var sheep2 = Vessel({'name':"Космическая овца №2",'position':[300,130], 'capacity':1000});
+    $('.b-space-sheep__create-sheep').on('click', function(){
+        var sheep = Vessel({'name':"Космическая овца №"+allBodies.length,'position':[0,0], 'capacity':1000});
+        currentObject = sheep;
+    });
 
-	/** сразу в полет */
-    sheep1.flyTo(mars, 30);
-    sheep2.flyTo(earth, 30);
+    /** анимируем космос */
+    starObject($('.b-space-sheep__field')[0], 100, 1000, 300);
 
-	/** пытаемся грузануть 1 корабль */
-	earth.unloadCargoFrom(sheep1, 2000);
-
-    $('.b-space-sheep__create-sheep').on
-
-
-
-
-
-
+    /** учим корабли летать */
+    $('.b-space-sheep__field').on('click', function(){
+        var e = event || window.event;
+        currentObject.flyTo([e.offsetX, e.offsetY],30);
+    });
 
 });
