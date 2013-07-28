@@ -1,7 +1,7 @@
 .b-space-sheep{}
 .b-space-sheep__field{
 	border:1px solid #EFEFEF;
-	background: rgb(107, 107, 116);
+	background: black;
 	position:relative;
 	width:500px;
 	height:500px;
@@ -66,9 +66,23 @@
 	color: rgb(114, 114, 114);
 	font: 12px monospace;
 	text-shadow: 1px 1px 3px rgb(138, 138, 138);
-	max-width:200px;
+	max-width:300px;
+}
+.b-space-sheep__object-star{
+    display: inline-block;
+    position: absolute;
+    z-index:1;
+    top: 2000px;
+    left: 0;
+    margin: 0;
+    padding:0;
+    width:7px;
+    height:7px;
+    background-image: url("data:image/gif;base64,R0lGODlhIwAHAIABAP///wAAACH5BAEAAAEALAAAAAAjAAcAAAIdjI+pe8APXZKQ0TbDtRNQD2rfVmnK5pAll63ueRQAOw==");
 }
 
+.b-space-sheep__all-sheep{
 
+}
 .b-space-sheep__create-sheep{}
 

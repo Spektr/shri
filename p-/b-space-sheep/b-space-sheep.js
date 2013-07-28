@@ -185,19 +185,73 @@ function Planet(){
 	return me;
 }
 
+function starObject(container, numStars, speed, delay){
+    console.log(container);
 
+    var i= 0;
+    window.setTimeout(function pull(){
+        if(i>=numStars){return false;}
+        i++;
+
+        var star = document.createElement("div"),
+            position= 0,
+            step = 7,
+            x = container.clientWidth,
+            y = container.clientHeight;
+        console.log(x);
+        console.log(y);
+        console.log(container.style);
+
+        star.className = "b-space-sheep__object-star";
+        container.appendChild(star);
+
+
+        var interval = window.setInterval(function starAnimate(){
+            position-=step;
+            star.style.backgroundPosition=position+"px";
+            if(position==-28){step*=-1;}
+            if(position>=0){
+                step*=-1;
+                star.style.left=Math.floor(Math.random() * (x + 1))+"px";
+                star.style.top=Math.floor(Math.random() * (y + 1))+"px";
+            }
+        },speed);
+
+        var timeout = window.setTimeout(pull, delay);
+    },0);
+
+
+
+
+
+
+}
+//window.clearInterval(interval);
 $(function(){
-	var yambler = Vessel({'name':"Злокорабль",'position':[0,0], 'capacity':1000});
+    /** анимируем космос */
+    starObject($('.b-space-sheep__field')[0], 100, 1000, 300);
+
+    /** выставляем две планеты */
 	var earth = Planet({'name':"Земля",'position':[80,20], 'loadLevel':10000});
 	var mars = Planet({'name':"Марс",'position':[180,200], 'loadLevel':10000});
-	var yambler2 = Vessel({'name':"Злокорабль 2",'position':[300,130], 'capacity':1000});
 
-	console.log("-----");
-	yambler.flyTo(mars, 30);
-	yambler2.flyTo(earth, 30);
+    /** создаем корабли */
+    var sheep1 = Vessel({'name':"Космическая овца №1",'position':[0,0], 'capacity':1000});
+	var sheep2 = Vessel({'name':"Космическая овца №2",'position':[300,130], 'capacity':1000});
 
-	$('.b-space-sheep__create-sheep').on
-	earth.unloadCargoFrom(yambler2, 2000);
+	/** сразу в полет */
+    sheep1.flyTo(mars, 30);
+    sheep2.flyTo(earth, 30);
+
+	/** пытаемся грузануть 1 корабль */
+	earth.unloadCargoFrom(sheep1, 2000);
+
+    $('.b-space-sheep__create-sheep').on
+
+
+
+
+
 
 
 });
