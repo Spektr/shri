@@ -5,8 +5,14 @@
 	position:relative;
 	width:500px;
 	height:500px;
+	float:left;
+	margin-right:10px;
 }
 .b-space-sheep__instruction{}
+.b-space-sheep__instruction h3{
+	margin:0;
+	text-align: center;
+}
 .b-space-sheep__object-sheep{
 	display: inline-block;
 	position: absolute;
@@ -19,8 +25,10 @@
 	height:21px;
 	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAMAAACeyVWkAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo0MThCOTU5RDIyRjVFMjExQjQ3NThBQjVEOTc1OEE4NiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpBNzM3MEYyNEY1MjIxMUUyOUM0M0VCNjdEQjAzNzg1NiIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpBNzM3MEYyM0Y1MjIxMUUyOUM0M0VCNjdEQjAzNzg1NiIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjQxOEI5NTlEMjJGNUUyMTFCNDc1OEFCNUQ5NzU4QTg2IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjQxOEI5NTlEMjJGNUUyMTFCNDc1OEFCNUQ5NzU4QTg2Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+o315hAAAABVQTFRFAAAA+/8A/woAaHf/fICt////////1cDF2AAAAAd0Uk5T////////ABpLA0YAAABUSURBVHjazNExDsAgCAVQ8IP3P3IRFa0hcehSBuW/EAalmhWtVjNV1Uzpk4qI7bXzqkAoMBUvRVccit8ol8KhLTS12zuvEcZsvNactY63L/PwCDAA+6kIMSP0elIAAAAASUVORK5CYII=");
     cursor: pointer;
-	-webkit-transition: all 3s ease;
-	transition: all 3s ease;
+	-webkit-transition:all 3s ease;
+	-moz-transition:all 3s ease;
+	-o-transition:all 3s ease;
+	transition:all 3s ease;
 }
 .b-space-sheep__object-sheep_right{
 	-moz-transform: rotate(90deg); /* Для Firefox */

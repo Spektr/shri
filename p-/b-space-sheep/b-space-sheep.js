@@ -225,7 +225,7 @@ function Vessel(){
 
 	/** донастраиваем визуальный обьект корабля */
     visualObject.className="b-space-sheep__object-sheep";
-    visualObject.onclick = function(){	//при клике на корабль, делаем его текущим
+    visualObject.onclick = function(event){	//при клике на корабль, делаем его текущим
         var e = event || window.event;
         currentObject = me;
         if (e.stopPropagation) {
@@ -273,7 +273,7 @@ function Planet(){
 
 	/** донастраиваем визуальный обьект планеты */
 	visualObject.className="b-space-sheep__object-planet";
-    visualObject.onclick = function(){	//при клике на планету, быстро летим к ней текущим кораблем
+    visualObject.onclick = function(event){	//при клике на планету, быстро летим к ней текущим кораблем
         var e = event || window.event;
         currentObject.flyTo(me.getPosition(),3);
         if (e.stopPropagation) {
@@ -361,12 +361,16 @@ $(function(){
 	space.appendChild(button);
 
     /** анимируем космос */
-    starObject(space, 100, 1000, 300);
+    starObject(space, 50, 1000, 300);
 
     /** учим корабли летать */
-    space.onclick = function(){
-        var e = event || window.event;
-        currentObject.flyTo([e.offsetX, e.offsetY],30);
+    space.onclick = function(event){
+        var e = event || window.event,
+			x = (e.offsetX)?e.offsetX:(e.layerX - e.currentTarget.offsetLeft),
+     		y = (e.offsetY)?e.offsetY:(e.layerY - e.currentTarget.offsetTop);
+		x=(x>=0)?x:0;
+		y=(y>=0)?y:0;
+        currentObject.flyTo([x, y],30);
     };
 
 });
