@@ -1,27 +1,25 @@
 $(function(){
 
-    //устанавливаем обработчик на полученные вопросы
-    bSimulatedServer.getQuestionArray(createTaskMenu);
+    bSimulatedServer.getQuestionArray(createTaskMenu);						//устанавливаем обработчик на полученные вопросы
 
-
-    function createTaskMenu(data){
-        var list =[];
+    function createTaskMenu(data){											//функция создания меню из ответа
+        var list =[];														//делаем на каждый вопрос один пункт меню
         for(var len=data.length, i=0;i<len;i++){
             var item = $('<div />', {'class':"b-task__item", 'text':"Вопрос "+i});
             list.push(item);
         }
+		
+        $('.b-task__menu').append(list);									//добавляем этот список на страницу
+        var processbar = new Indicator($('.b-index__process')[0], len);		//прикручиваем индикатор заполняемости
 
-        $('.b-task__menu').append(list);
-        var processbar = new Indicator($('.b-index__process')[0], len);
-
-        //хэндл на кнопы
-        $('.b-task__item').on('click', getQuestion);
+        $('.b-task__item').on('click', getQuestion);						//хэндл на кнопы
         function getQuestion(){
-            var index = $(this).index();
-            var question = bSimulatedServer.getQuestion(index);
-            var answerStatus = bSimulatedServer.setAnswer($('.b-task__slide_solution textarea').val(), index);
-            if(answerStatus>0){
-                var statusClass = "b-pic b-pic__shri b-pic__shri_correct b-indicator__point";
+            var index = $(this).index(),									//узнаем индекс вопроса
+            	question = bSimulatedServer.getQuestion(index),				//получаем вопрос по индексу
+            	answerStatus = bSimulatedServer.setAnswer($('.b-task__slide_solution textarea').val(), index);	//отвечаем на предыдущий вопрос и узнаем правильный ли ответ был
+            
+			if(answerStatus>0){												//оформляем согласно правильности ответа
+                var statusClass = "b-pic b-pic__shri b-pic__shri_correct b-indicator__point"; //обязательно помечаем классом индикатора чтоб это учитывалось
             }else if(answerStatus<0){
                 var statusClass = "b-pic b-pic__shri b-pic__shri_wrong";
             }else{
@@ -33,8 +31,7 @@ $(function(){
             $(this).addClass('b-task__item_active');
             $('.b-task__slide_description').html(question['request']);
 			
-			
-			if(question['example']){
+			if(question['example']){										//если есть пример то показываем его
 				$('.b-task__example').addClass("b-task__slide b-task__slide_example");
 				blib.include(question['example'], '.b-task__example');
 			}else{
@@ -42,25 +39,18 @@ $(function(){
 			}
 			
 			$('.b-task__slide_solution textarea').val(question['answer']).keyup();
-
-            processbar.autoChange(10);
+			
+            processbar.autoChange(10);										//изменяем статус процессбара
         }
     }
 
-    //закрывает текст вопроса
-    $('.b-task__slide_description').on('click',function(){
+    $('.b-task__slide_description').on('click',function(){				    //закрывает текст вопроса
         $(this).toggleClass('b-task__slide_closed');
     });
 
-    //автопрокрут ответа
-    $('.b-task__slide_solution textarea').on('keyup', function(){
+    $('.b-task__slide_solution textarea').on('keyup', function(){		    //автопрокрут ответа
         this.style.height = "1px";
         this.style.height = this.scrollHeight+"px";
     });
-
-
-
-
-
 
 });
