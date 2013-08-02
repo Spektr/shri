@@ -26,13 +26,18 @@ html, body, .b-index{
 	height:100%;
 }
 .b-index__menu{
-    float: left;
-    width: 120px;
-    height: 100%;
+	position: absolute;
+	width: 120px;
+	top: 25px;
+	bottom: 0;
     overflow: auto;
 }
 .b-index__content{
-    height: 100%;
     border-left: 1px dashed rgb(219, 219, 219);
     overflow-y: auto;
+	position: absolute;
+	top: 25px;
+	right: 0;
+	bottom: 0;
+	left: 120px;
 }

@@ -30,7 +30,7 @@
     border: 1px solid rgb(224, 224, 224);
     position: relative;
     margin: 2px;
-    padding: 25px 2px 2px 2px;
+    padding: 25px 2px 2px 15px;
     overflow: hidden;
 }
 .b-task__slide_closed{
@@ -66,11 +66,3 @@
     resize: vertical;
     overflow: hidden;
 }
-
-
-/*хаки*/
-.b-task__item:last-child,
-.b-task__slide:last-child{
-    margin-bottom: 30px;
-}
-/*хаки*/
