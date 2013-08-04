@@ -1,79 +1,108 @@
 window.blib =(function(){
-	var self        = this;
-	var storageFlag = ('localStorage' in window && window['localStorage'] !== null)?true:false;
-	var forceLoad   = "";																						/** postfix for force send request to server */
-	var version     = (storageFlag && localStorage.getItem('version'))?localStorage.getItem('version'):1;		/** (0_0 NaN .. 1)curent version, get from server (is seconds to last modified .ini file) */
-	var head        = document.getElementsByTagName('head')[0];
-	var js          = (storageFlag && localStorage.getItem('js'))?JSON.parse(localStorage.getItem('js')):{};
-	var css         = {};
-	
-	
-/*jQuery simulate $() and $.ajax*/
-	var $ = function(){
-		var els = document.getElementsByTagName('*');
-		var elsLen=els.length;
-		
-		var elements=new Array();
-		for(var i=0;i<arguments.length;i++){
-			var element=arguments[i];
+	var storageFlag = ('localStorage' in window && window['localStorage'] !== null)?true:false,
+		version     = (storageFlag && localStorage.getItem('version'))?localStorage.getItem('version'):1,
+		head        = document.getElementsByTagName('head')[0],
+		js          = (storageFlag && localStorage.getItem('js'))?JSON.parse(localStorage.getItem('js')):{},
+		css         = {},
+	/*jQuery simulate $() and $.ajax*/
+		$ = function(){
+			if(typeof(arguments) == "function"){return false;}
 			
-			if(typeof element=='string' && element.substr(0,1)=="."){
-				var pattern=new RegExp(element.substr(1));
-				for(i=0;i<elsLen;i++){
-					if(pattern.test(els[i].className)){
-						elements.push(els[i]);
+			var els = document.getElementsByTagName('*'),
+				elsLen=els.length,
+				elements=[],
+				result = {};
+			
+			for(var len=arguments.length, i=0; i<len; i++){
+				if(typeof(arguments[i])!='string'){continue;}
+				var element=arguments[i],
+					point = element.substr(0,1),
+					pattern = element.substr(1);
+			
+				if(point=="."){
+					for(var j=0;j<elsLen;j++){
+						var temp = els[j].className.split(' ');
+						for(var tmpLen=temp.length, k=0; k<tmpLen; k++){
+							if(temp[k] == pattern){elements.push(els[j]);	break;}
+						}
+					}
+				}else if(point=="#"){
+					var temp = document.getElementById(pattern);
+					if(temp){elements.push(temp);}
+				}else{
+					var temp = document.getElementsByTagName(element);
+					for(var tagLen=temp.length,j=0; j<tagLen; j++){
+						elements.push(temp[j]);
+					}
+				};
+			}
+			
+			result['length']=elements.length;
+			for(var len= result['length'], i=0; i<len; i++){
+				result[i]=elements[i];
+			}
+			
+			result.html = function(obj){
+				for(var len = this.length, i=0; i<len; i++){
+					this[i].innerHTML = obj;
+				}
+				return this;
+			};			
+			result.append = function(obj){
+				for(var len = this.length, i=0; i<len; i++){
+					this[i].appendChild(obj);
+				}
+				return this;
+			};
+			return result;
+		
+		},
+		ajax = function(dataObject) {
+			var xhr;
+			if (window.XMLHttpRequest) xhr = new XMLHttpRequest();
+			else if (window.ActiveXObject) {
+				try {
+					xhr = new ActiveXObject('Msxml2.XMLHTTP');
+				} catch (e){}
+				try {
+					xhr = new ActiveXObject('Microsoft.XMLHTTP');
+				} catch (e){}
+			}
+	
+			if (xhr) {
+				xhr.onreadystatechange = function(){
+					if (xhr.readyState === 4 && xhr.status === 200) {
+						var rData = (dataObject['dataType']=="json")?JSON.parse(xhr.responseText):xhr.responseText;
+						dataObject['success'](rData);
 					}
 				}
 				
-			}else if(typeof element=='string'){
-				element=document.getElementById(element)
-			};
-
-			if(arguments.length==1)return (elements)?elements:element;
-			elements.push(element);
-		}
-		return elements;
-	};
-	
-	var ajax = function(dataObject) {
-		var xhr;
-		if (window.XMLHttpRequest) xhr = new XMLHttpRequest();
-		else if (window.ActiveXObject) {
-			try {
-				xhr = new ActiveXObject('Msxml2.XMLHTTP');
-			} catch (e){}
-			try {
-				xhr = new ActiveXObject('Microsoft.XMLHTTP');
-			} catch (e){}
-		}
-
-		if (xhr) {
-			xhr.onreadystatechange = function(){
-				if (xhr.readyState === 4 && xhr.status === 200) {
-					var rData = (dataObject['dataType']=="json")?JSON.parse(xhr.responseText):xhr.responseText;
-					dataObject['success'](rData);
+				if(typeof(dataObject['data'])=="object"){
+					var temp = "";
+					for(key in dataObject['data']){
+						temp+=key+"="+dataObject['data'][key]+"&";
+					}
+					dataObject['data'] = temp.substr(0, temp.length-1);
 				}
+				
+				if(dataObject['type']!="GET"){
+					xhr.open("POST", dataObject['url'], true);
+					xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+					xhr.send(dataObject['data']);
+				}else{
+					xhr.open("GET", dataObject['url']+(dataObject['url'].indexOf("?")!=-1?"&":"?")+dataObject['data'], true);
+					xhr.setRequestHeader("Content-Type", "text/html");
+					xhr.send(null);
+				}
+			} else {
+				alert("Браузер не поддерживает AJAX");
 			}
-			
-			if(dataObject['dataType']!="html"){
-				xhr.open("POST", dataObject['url'], true);
-				xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-				xhr.send(dataObject['data']);
-			}else{
-				var rData = (dataObject['data'])?"?"+dataObject['data']:"";
-				xhr.open("GET", dataObject['url']+rData, true);
-				xhr.setRequestHeader("Content-Type", "text/html");
-				xhr.send(null);
-			}
-		} else {
-			alert("Браузер не поддерживает AJAX");
-		}
-	}
-	$.ajax = ajax;
-/*jQuery simulate $() and $.ajax*/
+		};
+	$['ajax'] = ajax;
+	/*jQuery simulate $() and $.ajax*/
 	
 	
-/** blib functions */
+	/** blib functions */
 	/**
 	* get all files in cache
 	* @param {object} obj		cache css or js
@@ -89,7 +118,7 @@ window.blib =(function(){
 			}
 		}
 		return arr;
-	};
+	},
 	
 	/**
 	* include css file
@@ -97,7 +126,7 @@ window.blib =(function(){
 	* @param {string}[] inCache	files which contain in it
 	* @return {object}			this
 	*/
-	var cssFunction = function(cssFile, inCache){
+	cssFunction = function(cssFile, inCache){
 		cssFile = cssFile.toString();
 	
 		if((cssFile in css) && (css[cssFile]['version']==version)){
@@ -109,8 +138,7 @@ window.blib =(function(){
 					if(innerFiles[i]==cssFile){return cssFunction(key, innerFiles);}
 				}
 			}
-			
-			forceLoad="?new="+version;
+
 			delete css[cssFile];
 			var addededStyle = document.getElementById(cssFile);
 			if(addededStyle){						
@@ -122,7 +150,7 @@ window.blib =(function(){
 		var link  = document.createElement('link');
 		link.rel  = 'stylesheet';
 		link.type = 'text/css';
-		link.href = cssFile+forceLoad;
+		link.href = cssFile+"?new="+version;
 		link.media = 'all';
 		link.id = cssFile;
 		if(head.appendChild(link)){
@@ -137,7 +165,7 @@ window.blib =(function(){
 			}
 		}
 		return this;
-	};
+	},
 	
 	/**
 	* include js file
@@ -145,11 +173,10 @@ window.blib =(function(){
 	* @param {string}[] inCache	files which contain in it
 	* @return {object}			this
 	*/
-	var jsFunction = function(jsFile, inCache){
+	jsFunction = function(jsFile, inCache){
 		jsFile = jsFile.toString();
 
 		if(jsFile in js){
-			forceLoad=(js[jsFile]['version']==version)?"":"?new="+version;
 			delete js[jsFile];
 			var addededScript = document.getElementById(jsFile);
 			if(addededScript){						
@@ -166,7 +193,7 @@ window.blib =(function(){
 
 		var script  = document.createElement('script');
 		script.id = jsFile;
-		script.src = jsFile+forceLoad;
+		script.src = jsFile+"?new="+version;
 		script.type="text/javascript";
 		if(head.appendChild(script)){
 			js[jsFile]={};
@@ -180,20 +207,20 @@ window.blib =(function(){
 			}
 		}
 		return this;
-	};
+	},
 	
 	/**
 	* include block (html+css+js in set container || css+js)
 	* @param {string} file		path of block without extension
 	* @param {string} target	selector where will be load block
 	*/
-	var includeFunction = function(file, target){
+	includeFunction = function(file, target){
 		cssFunction(file+'.css');
 
 		if(target){
 			var target = $(target);
 			$.ajax({
-				url:file+'.html',
+				url:file+'.html?new='+version,
 				dataType: "html",
 				success: function(data){
 					for(key in target){
@@ -205,7 +232,7 @@ window.blib =(function(){
 		}else{
 			jsFunction(file+'.js');
 		}
-	};
+	},
 	
 	/**
 	* method for get version of site and load all stylesheet/script in one file
@@ -214,7 +241,7 @@ window.blib =(function(){
 	* {srting}[]exception			blocks which will not be uploaded
 	* {srting}[]order				first turn load sctipts/if 'script' is false, then 'order' set chosen blocks
 	*/
-	var loadFunction = function(dataObject){
+	loadFunction = function(dataObject){
 		document.addEventListener("DOMContentLoaded", function(){
 			/** get files which we have */
 			if(storageFlag){
@@ -248,7 +275,7 @@ window.blib =(function(){
 			
 		}, false );//DOMContentLoaded
 	};
-/** blib functions */
+	/** blib functions */
 	
 	
 /** prehandling */
@@ -261,11 +288,12 @@ window.blib =(function(){
 	if(storageFlag){window.localStorage.clear();} //0_0 for clear old change b-blib
 /** prehandling */
 	
+	$['css']=cssFunction;
+	$['js']=jsFunction;
+	$['include']=includeFunction;
+	$['vanishLoad']=loadFunction;
+	
 	/** public object */
-	return {
-		'css': cssFunction,
-		'js': jsFunction,
-		'include':includeFunction,
-		'vanishLoad':loadFunction
-	};
+	return $;
+
 })(); 
