@@ -85,7 +85,7 @@ window.blib =(function(){
 					dataObject['data'] = temp.substr(0, temp.length-1);
 				}
 				
-				if(dataObject['type']!="GET"){
+				if(dataObject['type']!="GET" && dataObject['dataType']!="html"){
 					xhr.open("POST", dataObject['url'], true);
 					xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 					xhr.send(dataObject['data']);
