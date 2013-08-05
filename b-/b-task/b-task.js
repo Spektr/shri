@@ -1,19 +1,29 @@
 $(function(){
 
-    bSimulatedServer.getQuestionArray(createTaskMenu);						//устанавливаем обработчик на полученные вопросы
+	//устанавливаем обработчик на полученные вопросы
+    bSimulatedServer.getQuestionArray(createTaskMenu);
 
-    function createTaskMenu(data){											//функция создания меню из ответа
-        var list =[];														//делаем на каждый вопрос один пункт меню
+	/** функция создания меню из ответа */
+    function createTaskMenu(data){
+		
+		//делаем на каждый вопрос один пункт меню
+        var list =[];
         for(var len=data.length, i=0;i<len;i++){
             var item = $('<div />', {'class':"b-task__item", 'text':"Вопрос "+i});
             list.push(item);
         }
-		
-        $('.b-task__menu').append(list);									//добавляем этот список на страницу
-        var processbar = new Indicator($('.b-index__process')[0], len);		//прикручиваем индикатор заполняемости
-		processbar.complete(function(){										//ставим обработчик когда все будет заполнено
+        $('.b-task__menu').append(list);	
+
+		/**
+		 * Прикручиваем индикатор заполняемости и обработчик если все заполнено
+		 * Обработчик создает кнопку отправить в которой идет проверка на полноту заполнения,
+		 * и если все заполнено, то передается обработчик ответа и отсылаются данные на сервер
+		 */
+		var processbar = new Indicator($('.b-index__process')[0], len);
+		processbar.complete(function(){
 			if($('.b-task__submit')[0]){return false;}
-			var submitButton = $('<div />', {'class':"b-task__submit", 'text':"Отправить"}).on('click', function(){
+			var submitButton = $('<div />', {'class':"b-task__submit", 'text':"Отправить"});
+			submitButton.on('click', function(){
 				if($('.b-pic__shri_correct').length != $('.b-task__item').length){
 					alert("Заполните все поля правильно.");
 					return false;
@@ -30,8 +40,9 @@ $(function(){
 			
 			$('.b-task__menu').append(submitButton);
 		});
-
-        $('.b-task__item').on('click', getQuestion);						//хэндл на кнопы
+		
+		/** Устанавливаем обработчик на кнопки */
+        $('.b-task__item').on('click', getQuestion);
         function getQuestion(){
             var index = $(this).index(),									//узнаем индекс вопроса
             	question = bSimulatedServer.getQuestion(index),				//получаем вопрос по индексу
@@ -62,12 +73,14 @@ $(function(){
             processbar.autoChange(10);										//изменяем статус процессбара
         }
     }
-
-    $('.b-task__slide_description').on('click',function(){				    //закрывает текст вопроса
+	
+	/** закрывает текст вопроса */
+    $('.b-task__slide_description').on('click',function(){
         $(this).toggleClass('b-task__slide_closed');
     });
 
-    $('.b-task__slide_solution textarea').on('keyup', function(){		    //автопрокрут ответа
+	/** автопрокрут ответа */
+    $('.b-task__slide_solution textarea').on('keyup', function(){
         this.style.height = "1px";
         this.style.height = this.scrollHeight+"px";
     });
