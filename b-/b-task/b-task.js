@@ -18,7 +18,14 @@ $(function(){
 					alert("Заполните все поля правильно.");
 					return false;
 				}
-				alert("Отправлено на сервер");
+				
+				bSimulatedServer.sendQuestion(function(data){
+					if(data['status']){
+						alert("ответы приняты");
+					}else{
+						alert("ответы отклонены, поробуйте позже");
+					}
+				});
 			});
 			
 			$('.b-task__menu').append(submitButton);

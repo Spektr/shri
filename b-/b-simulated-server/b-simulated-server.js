@@ -64,6 +64,16 @@ window.bSimulatedServer = (function (){
             //проверка на регулярку
             var temp = (expr)?expr.test(answer):true;
             return (temp)?1:"-1";
-        }
+        },
+		
+		'sendQuestion':function(handle){
+			$.ajax({
+				url:"b-/b-simulated-server/b-simulated-server.php?action=sendQuestion",
+				dataType:"json",
+				type:"POST",
+                data:"data="+JSON.stringify(questionArray),
+				success: handle
+			});
+		}
     }
 })();

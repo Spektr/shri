@@ -79,10 +79,23 @@ switch($_REQUEST['action']){
 				"example":"p-/b-space-sheep/b-space-sheep",
 				"answerRegExp":false,
 				"answer":"https://github.com/Spektr/shri/tree/master/p-/b-space-sheep"
+				},
+				{
+				"request":"Сверстайте форму-анкету с нашими заданиями для кандидатов. Страница должна работать в следующих браузерах: MSIE (8, 9, 10), Google Chrome (26, 27), Firefox (20, 21), Opera (12.15, 12.14), Яндекс.Браузер 1.5. По возможности используйте приёмы безопасной деградации CSS. Страница должна содержать интерактив, реализованный с помощью JS и jQuery.",
+				"answerRegExp":false,
+				"answer":" github: https://github.com/Spektr/shri/ \n логи переданных ответов: /shri/b-/b-simulated-server/log.txt"
 				}
 			]
 		}';
 		
+	break;
+	
+	case "sendQuestion":
+		if(file_put_contents("log.txt", $_POST['data']."\n---------------\n", FILE_APPEND)){
+			echo '{"status":true}';
+		}else{
+			echo '{"status":false}';
+		}
 	break;
 	
 	default:
