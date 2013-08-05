@@ -1,7 +1,9 @@
 .b-task{}
 .b-task__menu{}
 .b-task__content{}
-.b-task__item{
+
+.b-task__item,
+.b-task__submit{
     text-decoration: none;
     margin: 2px;
     padding: 2px;
@@ -19,6 +21,9 @@
 .b-task__item:hover,
 .b-task__item_active{
     background: rgb(224, 224, 224);
+}
+.b-task__submit:hover{
+	background: #33FF00;
 }
 .b-task__item_correct{
     color: green;

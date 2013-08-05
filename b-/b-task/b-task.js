@@ -11,6 +11,18 @@ $(function(){
 		
         $('.b-task__menu').append(list);									//добавляем этот список на страницу
         var processbar = new Indicator($('.b-index__process')[0], len);		//прикручиваем индикатор заполняемости
+		processbar.complete(function(){										//ставим обработчик когда все будет заполнено
+			if($('.b-task__submit')[0]){return false;}
+			var submitButton = $('<div />', {'class':"b-task__submit", 'text':"Отправить"}).on('click', function(){
+				if($('.b-pic__shri_correct').length != $('.b-task__item').length){
+					alert("Заполните все поля правильно.");
+					return false;
+				}
+				alert("Отправлено на сервер");
+			});
+			
+			$('.b-task__menu').append(submitButton);
+		});
 
         $('.b-task__item').on('click', getQuestion);						//хэндл на кнопы
         function getQuestion(){
