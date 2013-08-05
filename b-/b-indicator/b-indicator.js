@@ -10,7 +10,8 @@ var Indicator = function (obj, pointNum){
     var self = document.createElement('div'),
         line = document.createElement('div'),
         percent = document.createElement('div'),
-        pointNum = (pointNum)?pointNum:0;
+        pointNum = (pointNum)?pointNum:0,
+		complete = function(){console.log("all is completed");};
 
     self.className = "b-indicator";
     line.className = "b-indicator__line";
@@ -33,7 +34,7 @@ var Indicator = function (obj, pointNum){
                 retObj = this;
 
             for(var i=0;i<elsLen;i++){
-                if(/b-indicator__point/.test(els[i].className)){
+                if(els[i].className.indexOf("b-indicator__point")!=-1){
                     count++;
                 }
             }
@@ -55,8 +56,13 @@ var Indicator = function (obj, pointNum){
             }else{
                 retObj.change(count*100/pointNum);
             }
+			
+			if(count == pointNum){complete();}
 
-        }
+        },
+		'complete':function(handle){
+			complete = handle;
+		}
     }
 }
 
