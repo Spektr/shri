@@ -13,7 +13,7 @@ window.bSimulatedServer = (function (){
 		*/
         'getQuestionArray':function(callback){
             $.ajax({
-                url:"b-/b-simulated-server/b-simulated-server.php",
+                url:"b-/b-simulated-server/b-simulated-server.json",
                 dataType:"json",
                 data:"action=getQuestions",
                 success:function(data){
